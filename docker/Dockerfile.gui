@@ -11,4 +11,8 @@ ENV PYTHONPATH=/app
 
 EXPOSE 8501
 
+# Create a non-root user and switch to it
+RUN useradd -m appuser
+USER appuser
+
 CMD ["streamlit", "run", "src/gui/streamlit_app.py"]

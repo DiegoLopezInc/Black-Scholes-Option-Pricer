@@ -44,6 +44,42 @@ Heatmap features:
 6. Implement data saving and retrieval functions
 7. Integrate all components and test thoroughly
 
+## Security Improvements and Setup Instructions
+
+To enhance security and make the project safe for public repositories, the following improvements have been implemented:
+
+1. Environment variables: Sensitive information such as database credentials are now managed using environment variables.
+2. Non-root user: The Dockerfile now creates and uses a non-root user for running the application.
+3. MySQL healthcheck: A healthcheck has been added to ensure the MySQL service is ready before the application attempts to connect.
+4. Secure database initialization: The MySQL service now creates a specific user for the application instead of using the root user.
+
+### Setup Instructions
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/black-scholes-option-pricer.git
+   cd black-scholes-option-pricer
+   ```
+
+2. Create a `.env` file in the project root with the following content:
+   ```
+   MYSQL_HOST=mysql
+   MYSQL_USER=options_user
+   MYSQL_PASSWORD=your_secure_password
+   MYSQL_DATABASE=options_db
+   MYSQL_ROOT_PASSWORD=your_secure_root_password
+   ```
+   Replace `your_secure_password` and `your_secure_root_password` with strong, unique passwords.
+
+3. Build and run the Docker containers:
+   ```
+   docker-compose up --build
+   ```
+
+4. Access the application at `http://localhost:8501`
+
+Note: The `.env` file contains sensitive information and should not be committed to version control. It has been added to `.gitignore` for this purpose.
+
 ## Future Enhancements
 - Connect to a data lake or repository for testing ideas
 - Optimize data usage and efficiency

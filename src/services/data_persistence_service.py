@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+import os
 
 class DataPersistenceService:
     """
@@ -14,7 +15,7 @@ class DataPersistenceService:
     It uses MySQL Connector to handle database operations.
     """
 
-    def __init__(self, host, user, password, database):
+    def __init__(self):
         """
         Initialize the DataPersistenceService and establish a database connection.
 
@@ -27,10 +28,10 @@ class DataPersistenceService:
         self.connection = None
         try:
             self.connection = mysql.connector.connect(
-                host=host,
-                user=user,
-                password=password,
-                database=database
+                host=os.getenv('MYSQL_HOST', 'mysql'),
+                user=os.getenv('MYSQL_USER', 'root'),
+                password=os.getenv('MYSQL_PASSWORD', 'password'),
+                database=os.getenv('MYSQL_DATABASE', 'options_db')
             )
             print("Successfully connected to the database")
         except Error as e:

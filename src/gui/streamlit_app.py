@@ -6,7 +6,7 @@ from src.services.data_persistence_service import DataPersistenceService
 
 # Initialize services
 option_service = OptionPricingService()
-data_service = DataPersistenceService(host='mysql', user='root', password='password', database='options_db')
+data_service = DataPersistenceService()
 
 st.title('Black-Scholes Option Pricer')
 

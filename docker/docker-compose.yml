@@ -12,6 +12,13 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=password
       - MYSQL_DATABASE=options_db
+    volumes:
+      - ../src:/app/src
+    develop:
+      watch:
+        - path: ../src
+          target: /app/src
+          action: sync
 
   mysql:
     image: mysql:8.0

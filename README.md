@@ -1,7 +1,7 @@
 # Black Scholes Option Pricer
 
 ## Overview
-This project implements a Black Scholes Option Pricing model with an interactive GUI using Streamlit. It also includes data persistence using MySQL.
+This project implements an interactive Black-Scholes Option Pricing calculator with a Streamlit GUI, featuring dynamic heatmaps and MySQL data persistence. The project structure is designed to host different parts of the system as microservices for modularity and reliability.
 
 ## Black Scholes Options Model
 The model uses the following inputs:

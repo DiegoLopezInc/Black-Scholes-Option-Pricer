@@ -73,6 +73,7 @@ To enhance security and make the project safe for public repositories, the follo
 
 3. Build and run the Docker containers:
    ```
+   cd .\docker\
    docker-compose up --build
    ```
 

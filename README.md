@@ -84,3 +84,4 @@ Note: The `.env` file contains sensitive information and should not be committed
 ## Future Enhancements
 - Connect to a data lake or repository for testing ideas
 - Optimize data usage and efficiency
+- Add more features to the GUI

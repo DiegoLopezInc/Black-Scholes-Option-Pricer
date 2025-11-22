@@ -206,9 +206,220 @@ Black-Scholes-Option-Pricer/
 └── requirements.txt
 ```
 
+## Advanced Optimization Features
+
+### Variance Reduction Techniques
+
+Faster convergence through mathematical optimization:
+
+**Antithetic Variates** - Achieve ~50% variance reduction:
+```python
+from src.models.black_scholes import monte_carlo_antithetic
+
+price, conv_data, var_reduction = monte_carlo_antithetic(
+    S=100, K=100, T=1, r=0.05, sigma=0.2,
+    option_type='call', num_simulations=50000
+)
+print(f"Variance reduced by {var_reduction:.1f}%")
+```
+
+**Control Variates** - Achieve up to 90% variance reduction:
+```python
+from src.models.black_scholes import monte_carlo_control_variate
+
+price, conv_data, var_reduction = monte_carlo_control_variate(
+    S=100, K=100, T=1, r=0.05, sigma=0.2,
+    option_type='call', num_simulations=100000
+)
+print(f"Variance reduced by {var_reduction:.1f}%")
+```
+
+**Benefits:**
+- Same accuracy with fewer simulations
+- Faster computation time
+- Lower memory requirements
+- Mathematically proven variance reduction
+
+See [`docs/OPTIMIZATION_TECHNIQUES.md`](docs/OPTIMIZATION_TECHNIQUES.md) for complete guide.
+
+### Greeks Calculator
+
+Calculate all option Greeks (first-order, second-order, and cross derivatives):
+
+```python
+from src.models.black_scholes import calculate_greeks
+
+greeks = calculate_greeks(S=100, K=100, T=1, r=0.05, sigma=0.2, option_type='call')
+
+print(f"Delta (Δ): {greeks['delta']:.6f}")
+print(f"Gamma (Γ): {greeks['gamma']:.6f}")
+print(f"Vega (ν): {greeks['vega']:.6f}")
+print(f"Theta (Θ): {greeks['theta']:.6f}")
+print(f"Rho (ρ): {greeks['rho']:.6f}")
+print(f"Vomma: {greeks['vomma']:.6f}")
+print(f"Vanna: {greeks['vanna']:.6f}")
+print(f"Charm: {greeks['charm']:.6f}")
+```
+
+### Mathematical Concept Search
+
+**searchthearXiv-style interface** for discovering mathematical concepts:
+
+```bash
+streamlit run src/gui/math_search.py
+```
+
+**Features:**
+- 🔍 Search 20+ mathematical Greek symbols
+- 📊 Browse 8 options Greeks with formulas
+- ⚡ Explore optimization techniques
+- 🤖 NLP-powered semantic search (with TINKER_KEY)
+- 📤 Export concepts to Sonnet 4.5 for deeper learning
+- 📈 Query analytics and fine-tuning
+
+**Search Modes:**
+1. **Quick Search** - Keyword-based search across all concepts
+2. **NLP-Powered Search** - Natural language queries with AI
+3. **Browse Categories** - Organized browsing by topic
+4. **Query Analytics** - Track search patterns and success rates
+
+### Interactive Visualizations
+
+**Optimization Comparison Notebook** - Marimo notebook with:
+
+```bash
+marimo edit notebooks/optimization_comparison.py
+```
+
+- Side-by-side convergence comparison
+- Variance reduction metrics visualization
+- Mathematical foundations explained
+- Interactive parameter exploration
+- Export prompts for Sonnet 4.5 research
+
+Inspired by **Terence Tao's AlphaEvolve** research on mathematical discovery at scale:
+- [GitHub Repository](https://github.com/google-deepmind/alphaevolve_repository_of_problems)
+- Paper: "Mathematical exploration and discovery at scale" (2024-2025)
+
+### Knowledge Base
+
+Comprehensive mathematical reference system:
+
+**Mathematical Greeks** (20+ symbols):
+- Alpha (α) - Significance level, learning rate
+- Beta (β) - Regression coefficients, Type II error
+- Gamma (Γ) - Gamma function, Euler constant
+- Delta (δ,Δ) - Dirac delta, finite differences
+- Epsilon (ε) - Small quantities, error terms
+- Zeta (ζ) - Riemann zeta function
+- Lambda (λ) - Eigenvalues, Lagrange multipliers
+- Mu (μ) - Mean, expected value
+- Sigma (σ,Σ) - Standard deviation, summation
+- And 11 more...
+
+**Options Greeks** (8 derivatives):
+- Delta (Δ) - ∂V/∂S - Price sensitivity
+- Gamma (Γ) - ∂²V/∂S² - Delta sensitivity
+- Vega (ν) - ∂V/∂σ - Volatility sensitivity
+- Theta (Θ) - ∂V/∂t - Time decay
+- Rho (ρ) - ∂V/∂r - Interest rate sensitivity
+- Vomma - ∂²V/∂σ² - Vega convexity
+- Vanna - ∂²V/∂S∂σ - Spot-vol cross derivative
+- Charm - ∂²V/∂S∂t - Delta decay
+
+**Optimization Techniques**:
+- Variance reduction (antithetic, control variates)
+- Gradient methods (SGD, momentum, Adam)
+- Terence Tao's AlphaEvolve methodology
+- Connections to options pricing
+
+## Usage Examples
+
+### Running All Interfaces
+
+```bash
+# 1. API Server (FastAPI with convergence endpoints)
+python -m src.api.routes
+# Visit http://localhost:8000/docs
+
+# 2. Main Streamlit GUI (Basic pricing, convergence, heatmaps)
+streamlit run src/gui/streamlit_app.py
+# Visit http://localhost:8501
+
+# 3. Mathematical Search Interface
+streamlit run src/gui/math_search.py
+# Visit http://localhost:8502
+
+# 4. Model Validation Notebook (LLM analysis with cost tracking)
+export TINKER_KEY="your_together_ai_key"
+marimo edit notebooks/model_validation.py
+# Visit http://localhost:2718
+
+# 5. Optimization Comparison Notebook (Variance reduction)
+marimo edit notebooks/optimization_comparison.py
+# Visit http://localhost:2718
+
+# 6. Run Tests
+python test_api.py
+```
+
+### Comparing Optimization Methods
+
+```python
+from src.models.black_scholes import (
+    black_scholes,
+    monte_carlo_option_price,
+    monte_carlo_antithetic,
+    monte_carlo_control_variate
+)
+
+S, K, T, r, sigma = 100, 100, 1, 0.05, 0.2
+
+# Analytical benchmark
+bs_price = black_scholes(S, K, T, r, sigma, 'call')
+print(f"Black-Scholes: ${bs_price:.6f}")
+
+# Standard Monte Carlo
+mc_price, mc_conv = monte_carlo_option_price(
+    S, K, T, r, sigma, 'call', 100000
+)
+print(f"Standard MC: ${mc_price:.6f}")
+
+# Antithetic variates
+anti_price, anti_conv, anti_var_red = monte_carlo_antithetic(
+    S, K, T, r, sigma, 'call', 50000
+)
+print(f"Antithetic: ${anti_price:.6f} ({anti_var_red:.1f}% variance reduction)")
+
+# Control variates
+cv_price, cv_conv, cv_var_red = monte_carlo_control_variate(
+    S, K, T, r, sigma, 'call', 100000
+)
+print(f"Control Variate: ${cv_price:.6f} ({cv_var_red:.1f}% variance reduction)")
+```
+
+## Performance
+
+### Typical Variance Reductions
+
+| Method | Variance Reduction | Convergence Rate | Best For |
+|--------|-------------------|------------------|----------|
+| Standard MC | Baseline | O(1/√n) | General purpose |
+| Antithetic Variates | 40-60% | O(1/√n) | Smooth payoffs |
+| Control Variates | 60-90% | O(1/√n) | When correlated control available |
+
+### Speed Comparison
+
+For same accuracy:
+- **Antithetic variates**: ~2x faster (50% variance reduction)
+- **Control variates**: ~5-10x faster (80-90% variance reduction)
+
 ## Future Enhancements
 - WebSocket streaming for real-time convergence updates
 - Additional exotic option types (Asian, Barrier, etc.)
 - Portfolio optimization tools
 - Historical data integration
-- Greeks calculation and visualization
+- Multi-asset correlation models
+- Machine learning price prediction
+- Integration with live market data
+- Advanced importance sampling techniques

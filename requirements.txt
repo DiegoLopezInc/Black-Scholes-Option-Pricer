@@ -3,3 +3,9 @@ plotly
 numpy
 scipy
 mysql-connector-python
+fastapi
+uvicorn
+pydantic
+marimo
+pandas
+together
